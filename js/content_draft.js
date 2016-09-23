@@ -48,47 +48,76 @@ stealer.enable();
 /* eventListner */
 function eMouseOver(e) {
 	e.stopPropagation();
+	// var siblings = getAllElements(this);
+	// siblings.forEach(sib => sib.style.outline = '1px dashed #f00');
 	this.style.outline = '1px dashed #f00';
 	
 }
 
 function eMouseOut(e) {
 	e.stopPropagation();
+	// var siblings = getAllElements(this);
+	// siblings.forEach(sib => sib.style.outline = '');
 	this.style.outline = '';
 	
 }
 
 function eMouseDown(e) {
 	e.stopPropagation();
+
+	var font = getFontCSSProperty(this);
+	var text = getTextCSSProperty(this);
+	var colorBg = getColorBgCSSProperty(this);
+	var box = getBoxCSSProperty(this);
+	var position = getPositionCSSProperty(this);
+	console.log(this.tagName);
+	console.log(this.className);
+	console.log(this.id);
+
+	// console.log('*******TAGNAME: \n', $(this).prop('tagName'));
+	var table = getTableCSSProperty(this, this.tagName);//need to check out if this works correctly
+	var list = getListCSSProperty(this, this.tagName);//need to check out if this works correctly
+
+	var misc = getMiscCSSProperty(this);
+	var effect = getEffectCSSProperty(this);
+
 	
-	var customizedName = 'example';//TODO: USER INPUT
-	var cssComponentName = customizedName + '-' + this.tagName.toLowerCase() + '-component-css-clone';
+	console.log('*******font: \n', font);
+	console.log('*******text: \n', text);
+	console.log('*******colorBg: \n', colorBg);
+	console.log('*******box: \n', box);
+	console.log('*******position: \n', position);
+	console.log('*******table: \n', table);
+	console.log('*******list: \n', list);
+	console.log('*******misc: \n', misc);
+	console.log('*******effect: \n', effect);
 
-	var cssComponent = `${this.tagName.toLowerCase()}.${cssComponentName} {${getFontCSSProperty(this)}
-	}`;
+	//TODO: when, user click on the element,
+	// 1. sibling list => change to one element
+	// 2. DOM attributes
+	// 3. CSS Property
 
-	console.log(cssComponent);
 
-	// var component = `<${this.tagName.toLowerCase()} className="${cssComponentName}">${$(this).text()}</${this.tagName.toLowerCase()}>`;
+
+
 }
 
 
 /* retrieve CSS property from the element */
-function getCSSProperty(element, property, condition) {
-	if ($(element).css(property) != condition) return `${property}: ${$(element).css(property)}`;
-}
+function css(element, property) { return $(element).css(property)}
+
 
 function getFontCSSProperty(element) {
 	//Font
-	var fontCSS = '';
-	if (getCSSProperty(element, 'font-family')) fontCSS += '\n\t' + getCSSProperty(element, 'font-family');
-	if (getCSSProperty(element, 'font-size')) fontCSS += '\n\t' + getCSSProperty(element, 'font-size');
-	if (getCSSProperty(element, 'font-weight', '400')) fontCSS += '\n\t' + getCSSProperty(element, 'font-weight');
-	if (getCSSProperty(element, 'font-variant', 'normal')) fontCSS += '\n\t' + getCSSProperty(element, 'font-variant');
-	if (getCSSProperty(element, 'font-style', 'normal')) fontCSS += '\n\t' + getCSSProperty(element, 'font-style');
-	return fontCSS;
-}
+	var font = {};
+	font.family = css(element, 'font-family');
+	font.size = css(element, 'font-size');
+	font.weight = css(element, 'font-weight') || '400';
+	font.variant = css(element, 'font-variant') || 'normal';
+	font.style = css(element, 'font-style') || 'normal';
 
+	return font;
+}
 
 function getTextCSSProperty(element) {
 	//Text
