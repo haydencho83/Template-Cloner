@@ -64,7 +64,7 @@ function eMouseDown(e) {
 	var customizedName = 'example';//TODO: USER INPUT
 	var cssComponentName = customizedName + '-' + this.tagName.toLowerCase() + '-component-css-clone';
 
-	var cssComponent = `${this.tagName.toLowerCase()}.${cssComponentName} {${getFontCSSProperty(this)}
+	var cssComponent = `${this.tagName.toLowerCase()}.${cssComponentName} {${getFontCSSProperty(this)}${getTextCSSProperty(this)}
 	}`;
 
 	console.log(cssComponent);
@@ -92,18 +92,17 @@ function getFontCSSProperty(element) {
 
 function getTextCSSProperty(element) {
 	//Text
-	var text = {};
-	text.letterSpacing = css(element, 'letter-spacing') || 'normal';
-	text.lineHeight = css(element, 'line-height') || 'normal';
-	text.decoration = css(element, 'text-decoration') || 'none';
-	text.align = css(element, 'text-align') || 'start';
-	text.indent = css(element, 'text-indent') || '0px';
-	text.transform = css(element, 'text-transform') || 'none';
-	text.verticalAlign = css(element, 'vertical-align') || 'baseline';
-	text.whiteSpace = css(element, 'white-space') || 'normal';
-	text.wordSpacing = css(element, 'word-spacing') || 'normal';
-
-	return text;
+	var textCSS = '';
+	if (getCSSProperty(element, 'letter-spacing', '0')) textCSS += '\n\t' + getCSSProperty(element, 'letter-spacing');
+	if (getCSSProperty(element, 'line-height', 'normal')) textCSS += '\n\t' + getCSSProperty(element, 'line-height');
+	if (getCSSProperty(element, 'text-decoration', 'none')) textCSS += '\n\t' + getCSSProperty(element, 'text-decoration');
+	if (getCSSProperty(element, 'text-align', 'start')) textCSS += '\n\t' + getCSSProperty(element, 'text-align');
+	if (getCSSProperty(element, 'text-indent', '0px')) textCSS += '\n\t' + getCSSProperty(element, 'text-indent');
+	if (getCSSProperty(element, 'text-transform', 'none')) textCSS += '\n\t' + getCSSProperty(element, 'text-transform');
+	if (getCSSProperty(element, 'vertical-align', 'baseline')) textCSS += '\n\t' + getCSSProperty(element, 'vertical-align');
+	if (getCSSProperty(element, 'white-space', 'normal')) textCSS += '\n\t' + getCSSProperty(element, 'white-space');
+	if (getCSSProperty(element, 'word-spacing', '0px')) textCSS += '\n\t' + getCSSProperty(element, 'word-spacing');
+	return textCSS;
 }
 
 function getColorBgCSSProperty(element) {
