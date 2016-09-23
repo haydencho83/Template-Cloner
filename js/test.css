@@ -1,0 +1,20 @@
+p.example-p-component-clone {
+	font-family: "Great Vibes", cursive;
+	font-size: 100px;
+	line-height: 160px;
+	text-align: center;
+	color: rgb(128, 128, 128);
+	height: 320px;
+	width: 926.6666870117188px;
+	border-top-color: rgb(128, 128, 128);
+	border-bottom-color: rgb(128, 128, 128);
+	border-right-color: rgb(128, 128, 128);
+	border-left-color: rgb(128, 128, 128);
+	margin-top: 15px;
+	list-style-type: disc;
+	list-style-position: outside;
+	transition: all 0s ease 0s;
+	outline: rgb(255, 0, 0) dashed 1.11111px;
+	box-sizing: border-box;
+	text-shadow: rgb(255, 255, 255) 0px 1px 1px;
+}
