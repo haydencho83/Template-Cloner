@@ -18,3 +18,24 @@ p.example-p-component-clone {
 	box-sizing: border-box;
 	text-shadow: rgb(255, 255, 255) 0px 1px 1px;
 }
+
+h2.example-h2-component-clone {
+	font-family: "Open Sans", Arial, sans-serif;
+	font-size: 30.002px;
+	font-weight: bold;
+	letter-spacing: -1px;
+	line-height: 30.002px;
+	color: rgb(77, 78, 83);
+	height: 29.600000381469727px;
+	width: 627.6000366210938px;
+	border-top-color: rgb(77, 78, 83);
+	border-bottom-color: rgb(77, 78, 83);
+	border-right-color: rgb(77, 78, 83);
+	border-left-color: rgb(77, 78, 83);
+	margin-bottom: 12px;
+	list-style-type: disc;
+	list-style-position: outside;
+	transition: all 0s ease 0s;
+	outline: rgb(255, 0, 0) dashed 0.8px;
+	word-wrap: break-word;
+}

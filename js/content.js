@@ -58,47 +58,66 @@ function eMouseOut(e) {
 	
 }
 
-
-/*
-
-mouse click => triggers the function
-func nestingComponent () {
-	//1. fetch the component recursively
-	//2. fetch the css for each component	
-}
-*/
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
 
 function eMouseDown(e) {
 	e.stopPropagation();
-	var componentName = getComponentName(this);
-	var componentTag = `<${this.tagName.toLowerCase()} className="${componentName}">${$(this).text()}</${this.tagName.toLowerCase()}>`;
-	var componentCSS = getComponentCSS(this);
-
-	console.log(componentTag);
-	console.log(componentCSS);
-	console.log(getAllElements(this));
+	var component = getComponent(this);
+	var cssProperties = fetchAllCSSComponent(this);
+	
+	console.log(component);
+	console.log(cssProperties);
 }
 
 
-
-
-function getCustomizedName () {
-	//TODO: USER INPUT
-	return 'example';
+function getComponent(element){
+	var elements = getAllElements(element);
+	elements.forEach(function(el){
+		$(el).removeAttributes();
+		$(el).addClass(getComponentClassName(el));
+	});
+	return elements[0];
 }
 
 
-function getComponentName(element){
-	var customizedName = getCustomizedName();
-	var componentName = customizedName + '-' + element.tagName.toLowerCase() + '-component-clone'; 
-	return componentName;
+jQuery.fn.removeAttributes = function() {
+  return this.each(function() {
+    var attributes = $.map(this.attributes, function(item) {
+      return item.name;
+    });
+    var img = $(this);
+    $.each(attributes, function(i, item) {
+    img.removeAttr(item);
+    });
+  });
 }
 
 
+function getComponentClassName(element) {
+	console.log(element.parentNode);
+	var customizedName = 'example';
+	var className = `${customizedName}-${element.tagName.toLowerCase()}-component-clone`;
+	return className;
+}
+
+
+function fetchAllCSSComponent(element) {
+	var elements = getAllElements(element);
+	var cssComponent = '';
+	elements.forEach(el => cssComponent += getComponentCSS(el) + '\n\n');
+	return cssComponent;
+}
+
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
 
 
 function getComponentCSS(element) {
-	var CSSComponent = element.tagName.toLowerCase() + '.' + getComponentName(element) + ' {'
+	var componentClassName = getComponentClassName(element);
+	var CSSComponent = element.tagName.toLowerCase() + '.' + componentClassName + ' {'
 		+ getFontCSSProperty(element) 
 		+ getTextCSSProperty(element)
 		+ getColorBgCSSProperty(element)
@@ -272,7 +291,7 @@ function getAllElements (element) {
 
 		for (var i = 0; i < childs.length; i++) {
 			if (childs[i].hasChildNodes()) {
-				elements = elements.concat(this.getAllElements(childs[i]));
+				elements = elements.concat(getAllElements(childs[i]));
 			}
 			else if (childs[i].nodeType == 1) {
 				elements.push(childs[i]);
