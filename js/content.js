@@ -76,7 +76,9 @@ function getComponent(element){
 	var elements = getAllElements(element);
 	elements.forEach(function(el){
 		$(el).removeAttributes();
-		$(el).addClass(getComponentClassName(el));
+		var attr = document.createAttribute('className');
+		attr.value = getComponentClassName(el);
+		el.setAttributeNode(attr);
 	});
 	return elements[0];
 }
@@ -96,7 +98,6 @@ jQuery.fn.removeAttributes = function() {
 
 
 function getComponentClassName(element) {
-	console.log(element.parentNode);
 	var customizedName = 'example';
 	var className = `${customizedName}-${element.tagName.toLowerCase()}-component-clone`;
 	return className;
