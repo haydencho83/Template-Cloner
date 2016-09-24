@@ -1,6 +1,3 @@
-console.log('content has been loaded');
-
-
 function Stealer() {
 
 	this.addEventListeners = function() {
@@ -27,24 +24,6 @@ function Stealer() {
 }
 
 
-/* prototype methods */
-Stealer.prototype.enable = function() {
-	var document = getCurrentDocument();
-	this.addEventListeners();
-}
-
-Stealer.prototype.disable = function() {
-	var document = getCurrentDocument();
-	this.removeEventListeners();
-}
-
-
-
-stealer = new Stealer();
-stealer.enable();
-
-
-
 /* eventListner */
 function eMouseOver(e) {
 	e.stopPropagation();
@@ -64,34 +43,56 @@ function eMouseOut(e) {
 
 function eMouseDown(e) {
 	e.stopPropagation();
-	var component = getComponent(this);
-	var cssProperties = fetchAllCSSComponent(this);
-	
-	console.log(component);
-	console.log(cssProperties);
+	var dom = getComponent(this);
+	var cssProperties = fetchAllCSSComponent(dom);
+	var component = dom.outerHTML;
+	chrome.runtime.sendMessage({cssProperties: cssProperties, component: component});
+
 }
 
 
 function getComponent(element){
-	var elements = getAllElements(element);
+	var elements = cloneAllElements(element);
 	elements.forEach(function(el){
-		$(el).removeAttributes();
-		var attr = document.createAttribute('className');
-		attr.value = getComponentClassName(el);
+		var attr = document.createAttribute('class');
+		var className = getComponentClassName(el);
+		attr.value = className;
 		el.setAttributeNode(attr);
 	});
 	return elements[0];
 }
 
+function cloneAllElements (element) {
+	var elements = [];
+	if (element && element.hasChildNodes()) {
+		var clone = $(element).clone();
+		clone[0].style.outline = '';
+		elements.push(clone[0]);
+		var childs = element.childNodes;
 
-jQuery.fn.removeAttributes = function() {
-  return this.each(function() {
-    var attributes = $.map(this.attributes, function(item) {
+		for (var i = 0; i < childs.length; i++) {
+			if (childs[i].hasChildNodes()) {
+				elements = elements.concat(getAllElements(childs[i]));
+			}
+			else if (childs[i].nodeType == 1) {
+				elements.push(childs[i]);
+			}
+		}
+	}
+	return elements;
+}
+
+
+
+//utility function
+function removeAttributes(element) {
+	return $(element).each(function() {
+    var attributes = $.map(element.attributes, function(item) {
       return item.name;
     });
-    var img = $(this);
+    var tag = $(element);
     $.each(attributes, function(i, item) {
-    img.removeAttr(item);
+    tag.removeAttr(item);
     });
   });
 }
@@ -99,10 +100,13 @@ jQuery.fn.removeAttributes = function() {
 
 function getComponentClassName(element) {
 	var customizedName = 'example';
-	var className = `${customizedName}-${element.tagName.toLowerCase()}-component-clone`;
+	var className = `${customizedName}-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
 	return className;
 }
 
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
 
 function fetchAllCSSComponent(element) {
 	var elements = getAllElements(element);
@@ -111,14 +115,11 @@ function fetchAllCSSComponent(element) {
 	return cssComponent;
 }
 
-/*************************************************************************/
-/*************************************************************************/
-/*************************************************************************/
 
 
 function getComponentCSS(element) {
-	var componentClassName = getComponentClassName(element);
-	var CSSComponent = element.tagName.toLowerCase() + '.' + componentClassName + ' {'
+	console.log(element);
+	var CSSComponent = element.tagName.toLowerCase() + '.' + element.className + ' {'
 		+ getFontCSSProperty(element) 
 		+ getTextCSSProperty(element)
 		+ getColorBgCSSProperty(element)
@@ -305,13 +306,28 @@ function getAllElements (element) {
 
 //closing the stealer
 function close(e) {
-	// Close the css viewer if the cssViewer is enabled.
+	console.log('app successfully escaped');
 	if ( e.keyCode === 27){
-		// Remove the red outline
-		// CSSViewer_current_element.style.outline = '';
+		// Remove the red outline		
 		stealer.disable();
 	}	
 }
 
 
-document.onkeydown = close;
+/* prototype methods */
+Stealer.prototype.enable = function() {
+	var document = getCurrentDocument();
+	this.addEventListeners();
+}
+
+Stealer.prototype.disable = function() {
+	var document = getCurrentDocument();
+	this.removeEventListeners();
+}
+
+
+stealer = new Stealer();
+stealer.enable();
+
+document.addEventListener('keydown', close);
+
