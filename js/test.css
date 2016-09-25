@@ -1,55 +1,12 @@
-p.example-1474749958588-p-component-clone {
+a.example-1474834255437-a-component-clone {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	line-height: 21px;
-	text-align: justify;
-	color: rgb(137, 142, 146);
-	height: 80px;
-	width: 400.0000305175781px;
-	border-top-color: rgb(137, 142, 146);
-	border-bottom-color: rgb(137, 142, 146);
-	border-right-color: rgb(137, 142, 146);
-	border-left-color: rgb(137, 142, 146);
-	margin-bottom: 64px;
-	margin-right: 160px;
-	margin-left: 160px;
-	max-width: 400px;
-	list-style-type: disc;
-	list-style-position: outside;
-	transition: all 0s ease 0s;
-	outline: rgb(137, 142, 146) none 0px;
-	box-sizing: border-box;
-}
-
-b.example-1474749958588-b-component-clone {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	font-weight: bold;
-	line-height: 21px;
-	text-align: justify;
-	color: rgb(137, 142, 146);
-	height: 16.666667938232422px;
-	width: 38.611114501953125px;
-	border-top-color: rgb(137, 142, 146);
-	border-bottom-color: rgb(137, 142, 146);
-	border-right-color: rgb(137, 142, 146);
-	border-left-color: rgb(137, 142, 146);
-	list-style-type: disc;
-	list-style-position: outside;
-	transition: all 0s ease 0s;
-	outline: rgb(137, 142, 146) none 0px;
-	box-sizing: border-box;
-}
-
-a.example-1474749958588-a-component-clone {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	font-weight: bold;
-	line-height: 21px;
-	text-align: justify;
+	font-size: 21px;
+	font-weight: 300;
+	line-height: 29.4px;
+	text-align: center;
 	color: rgb(51, 122, 183);
-	height: 16.666667938232422px;
-	width: 38.611114501953125px;
+	height: 53px;
+	width: 509.1875px;
 	border-top-color: rgb(51, 122, 183);
 	border-bottom-color: rgb(51, 122, 183);
 	border-right-color: rgb(51, 122, 183);
@@ -61,66 +18,51 @@ a.example-1474749958588-a-component-clone {
 	box-sizing: border-box;
 }
 
-h1.example-1474750387641-h1-component-clone {
-	font-family: "Times New Roman";
-	font-size: 24px;
-	font-weight: bold;
-	line-height: 26.4px;
-	text-align: center;
-	color: rgb(89, 92, 95);
-	height: 25.555557250976562px;
-	width: 720.0000610351562px;
-	border-top-color: rgb(89, 92, 95);
-	border-bottom-color: rgb(89, 92, 95);
-	border-right-color: rgb(89, 92, 95);
-	border-left-color: rgb(89, 92, 95);
-	margin-top: 16.08px;
-	margin-bottom: 30px;
-	list-style-type: disc;
-	list-style-position: outside;
-	transition: all 0s ease 0s;
-	outline: rgb(89, 92, 95) none 0px;
-	box-sizing: border-box;
-}
-
-
-h3.example-1474750758218-h3-component-clone {
+p.example-1474834255415-p-component-clone {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 24px;
-	line-height: 26.4px;
-	text-align: center;
-	color: rgb(51, 51, 51);
-	height: 26px;
-	width: 750px;
-	border-top-color: rgb(51, 51, 51);
-	border-bottom-color: rgb(51, 51, 51);
-	border-right-color: rgb(51, 51, 51);
-	border-left-color: rgb(51, 51, 51);
-	margin-top: 20px;
-	margin-bottom: 5px;
-	list-style-type: disc;
-	list-style-position: outside;
-	transition: all 0s ease 0s;
-	outline: rgb(51, 51, 51) none 0px;
-	box-sizing: border-box;
-}
-
-p.example-1474750852165-p-component-clone {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 16px;
-	line-height: 24px;
+	font-size: 21px;
+	font-weight: 300;
+	line-height: 29.4px;
 	text-align: center;
 	color: rgb(85, 85, 85);
-	height: 24px;
-	width: 720px;
+	height: 87px;
+	width: 576px;
 	border-top-color: rgb(85, 85, 85);
 	border-bottom-color: rgb(85, 85, 85);
 	border-right-color: rgb(85, 85, 85);
 	border-left-color: rgb(85, 85, 85);
-	margin-bottom: 10px;
+	margin-bottom: 20px;
+	margin-right: 72px;
+	margin-left: 72px;
+	max-width: 80%;
 	list-style-type: disc;
 	list-style-position: outside;
 	transition: all 0s ease 0s;
 	outline: rgb(85, 85, 85) none 0px;
+	box-sizing: border-box;
+}
+
+a.example-1474834384019-a-component-clone {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 20px;
+	color: rgb(86, 61, 124);
+	height: 50px;
+	width: 112.703125px;
+	border-top-color: rgb(86, 61, 124);
+	border-bottom-color: rgb(86, 61, 124);
+	border-right-color: rgb(86, 61, 124);
+	border-left-color: rgb(86, 61, 124);
+	margin-left: -15px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-right: 15px;
+	padding-left: 15px;
+	float: left;
+	list-style-type: disc;
+	list-style-position: outside;
+	transition: all 0s ease 0s;
+	outline: rgb(86, 61, 124) none 0px;
 	box-sizing: border-box;
 }

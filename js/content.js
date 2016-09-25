@@ -28,13 +28,11 @@ function Stealer() {
 function eMouseOver(e) {
 	e.stopPropagation();
 	this.style.outline = '1px dashed #f00';
-	
 }
 
 function eMouseOut(e) {
 	e.stopPropagation();
 	this.style.outline = '';
-	
 }
 
 /*************************************************************************/
@@ -42,84 +40,32 @@ function eMouseOut(e) {
 /*************************************************************************/
 
 function eMouseDown(e) {
+	this.style.outline = '';
 	e.stopPropagation();
-	var dom = getComponent(this);
-	var cssProperties = fetchAllCSSComponent(dom);
-	var component = dom.outerHTML;
-	chrome.runtime.sendMessage({cssProperties: cssProperties, component: component});
-
+	var component = getComponent(this);
+	chrome.runtime.sendMessage(component);
 }
 
-
+//getting component of ONE element
 function getComponent(element){
-	var elements = cloneAllElements(element);
-	elements.forEach(function(el){
-		var attr = document.createAttribute('class');
-		var className = getComponentClassName(el);
-		attr.value = className;
-		el.setAttributeNode(attr);
-	});
-	return elements[0];
-}
+	var component = '';
+	var className = `example-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
+	getComponentCSS(element, className);
 
-function cloneAllElements (element) {
-	var elements = [];
-	if (element && element.hasChildNodes()) {
-		var clone = $(element).clone();
-		clone[0].style.outline = '';
-		elements.push(clone[0]);
-		var childs = element.childNodes;
-
-		for (var i = 0; i < childs.length; i++) {
-			if (childs[i].hasChildNodes()) {
-				elements = elements.concat(getAllElements(childs[i]));
-			}
-			else if (childs[i].nodeType == 1) {
-				elements.push(childs[i]);
-			}
+	component += `<${element.tagName.toLowerCase()} class="${className}">`;
+	for (var i = 0; i < element.childNodes.length; i++) {
+		if (element.childNodes[i].nodeType == 3) component += element.childNodes[i].nodeValue;
+		else if (element.childNodes[i].nodeType == 1) {
+			component += getComponent(element.childNodes[i]);
 		}
 	}
-	return elements;
+	component += `</${element.tagName.toLowerCase()}>`;
+	return component;
 }
 
 
-
-//utility function
-function removeAttributes(element) {
-	return $(element).each(function() {
-    var attributes = $.map(element.attributes, function(item) {
-      return item.name;
-    });
-    var tag = $(element);
-    $.each(attributes, function(i, item) {
-    tag.removeAttr(item);
-    });
-  });
-}
-
-
-function getComponentClassName(element) {
-	var customizedName = 'example';
-	var className = `${customizedName}-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
-	return className;
-}
-
-/*************************************************************************/
-/*************************************************************************/
-/*************************************************************************/
-
-function fetchAllCSSComponent(element) {
-	var elements = getAllElements(element);
-	var cssComponent = '';
-	elements.forEach(el => cssComponent += getComponentCSS(el) + '\n\n');
-	return cssComponent;
-}
-
-
-
-function getComponentCSS(element) {
-	console.log(element);
-	var CSSComponent = element.tagName.toLowerCase() + '.' + element.className + ' {'
+function getComponentCSS(element, className) {
+	var CSSComponent = element.tagName.toLowerCase() + '.' + className + ' {'
 		+ getFontCSSProperty(element) 
 		+ getTextCSSProperty(element)
 		+ getColorBgCSSProperty(element)
@@ -131,8 +77,15 @@ function getComponentCSS(element) {
 		+ getEffectCSSProperty(element)
 	  + '\n}';
 
-	return CSSComponent;
+	  chrome.runtime.sendMessage(CSSComponent);
+	// return CSSComponent;
 }
+
+
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
+
 
 /* retrieve CSS property from the element */
 function getCSSProperty(element, property, condition) {

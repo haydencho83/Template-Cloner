@@ -1,6 +1,3 @@
-console.log('content has been loaded');
-
-
 function Stealer() {
 
 	this.addEventListeners = function() {
@@ -27,257 +24,313 @@ function Stealer() {
 }
 
 
-/* prototype methods */
-Stealer.prototype.enable = function() {
-	var document = getCurrentDocument();
-	this.addEventListeners();
-}
-
-Stealer.prototype.disable = function() {
-	var document = getCurrentDocument();
-	this.removeEventListeners();
-}
-
-
-
-stealer = new Stealer();
-stealer.enable();
-
-
-
 /* eventListner */
 function eMouseOver(e) {
 	e.stopPropagation();
-	// var siblings = getAllElements(this);
-	// siblings.forEach(sib => sib.style.outline = '1px dashed #f00');
 	this.style.outline = '1px dashed #f00';
 	
 }
 
 function eMouseOut(e) {
 	e.stopPropagation();
-	// var siblings = getAllElements(this);
-	// siblings.forEach(sib => sib.style.outline = '');
 	this.style.outline = '';
-	
 }
+
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
 
 function eMouseDown(e) {
 	e.stopPropagation();
-
-	var font = getFontCSSProperty(this);
-	var text = getTextCSSProperty(this);
-	var colorBg = getColorBgCSSProperty(this);
-	var box = getBoxCSSProperty(this);
-	var position = getPositionCSSProperty(this);
-	console.log(this.tagName);
-	console.log(this.className);
-	console.log(this.id);
-
-	// console.log('*******TAGNAME: \n', $(this).prop('tagName'));
-	var table = getTableCSSProperty(this, this.tagName);//need to check out if this works correctly
-	var list = getListCSSProperty(this, this.tagName);//need to check out if this works correctly
-
-	var misc = getMiscCSSProperty(this);
-	var effect = getEffectCSSProperty(this);
-
+	process(this);
 	
-	console.log('*******font: \n', font);
-	console.log('*******text: \n', text);
-	console.log('*******colorBg: \n', colorBg);
-	console.log('*******box: \n', box);
-	console.log('*******position: \n', position);
-	console.log('*******table: \n', table);
-	console.log('*******list: \n', list);
-	console.log('*******misc: \n', misc);
-	console.log('*******effect: \n', effect);
+}
 
-	//TODO: when, user click on the element,
-	// 1. sibling list => change to one element
-	// 2. DOM attributes
-	// 3. CSS Property
+function process(elem) {
+	var elements = getAllElements(elem);
+	var clonedElements = cloneAllElements(elem);
+	var cssComponent = '';
+	var componentObj;
+
+	/*********************************/
+	var clone = clonedElements;
 
 
+	/*********************************/
 
+	function fetchingComponents(){
+		// console.log(clonedElements[0])
+		for (var i = 0; i < elements.length; i++) {
+			var className = getComponentClassName(clonedElements[i]);
+			updateAttributes(clonedElements[0], className)
+			// removeAttributes(clonedElements[i]);
+			
+			$(clonedElements[i]).addClass(className);
+
+			cssComponent += getComponentCSS(elements[i], className) + '\n\n';
+		}
+	}
+
+	$.when(fetchingComponents())
+	.then(function(){
+		componentObj = {component: clonedElements[0].outerHTML, css: cssComponent}
+		chrome.runtime.sendMessage(componentObj);	
+	})
 
 }
+
+
+function updateAttributes(el, className) {
+	//recursively iterate through inner elements of the clonedElements[0], and remove the className
+
+}
+
+
+function removeAttributes(el) {
+	while (el.attributes.length) {
+		var attr = el.attributes[0].name;
+		$(el).removeAttr(attr)
+	}
+}
+// // utility function
+// function removeAttributes(element) {
+
+// 	return $(element).each(function() {
+//     var attributes = $.map(element.attributes, function(item) {
+//       return item.name;
+//     });
+//     var tag = $(element);
+//     $.each(attributes, function(i, item) {
+//     tag.removeAttr(item);
+//     });
+//   });
+// }
+
+
+
+function getComponent(elements){
+	elements.forEach(function(el){
+		var attr = document.createAttribute('class');
+		var className = getComponentClassName(el);
+		attr.value = className;
+		el.setAttributeNode(attr);
+	});
+	return elements[0];
+}
+
+function fetchAllCSSComponent(elements) {
+	// var elements = getAllElements(element);
+	var cssComponent = '';
+	elements.forEach(el => cssComponent += getComponentCSS(el) + '\n\n');
+	return cssComponent;
+}
+
+function getComponentClassName(element) {
+	var customizedName = 'example';
+	var className = `${customizedName}-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
+	return className;
+}
+
+
+function getComponentCSS(element, className) {
+	var CSSComponent = element.tagName.toLowerCase() + '.' + className + ' {'
+		+ getFontCSSProperty(element) 
+		+ getTextCSSProperty(element)
+		+ getColorBgCSSProperty(element)
+		+ getBoxCSSProperty(element)
+		+ getPositionCSSProperty(element)
+		+ getTableCSSProperty(element)
+		+ getListCSSProperty(element)
+		+ getMiscCSSProperty(element)
+		+ getEffectCSSProperty(element)
+	  + '\n}';
+
+	return CSSComponent;
+}
+
+
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
+
+
+function cloneAllElements (element) {
+	var elements = [];
+	if (element && element.hasChildNodes()) {
+		var clone = $(element).clone();
+		clone[0].style.outline = '';
+		elements.push(clone[0]);
+		var childs = element.childNodes;
+
+		for (var i = 0; i < childs.length; i++) {
+			if (childs[i].hasChildNodes()) {
+				elements = elements.concat(getAllElements(childs[i]));
+			}
+			else if (childs[i].nodeType == 1) {
+				elements.push(childs[i]);
+			}
+		}
+	}
+	return elements;
+}
+
+
+
+
+
+
+/***************************************************/
+/*************************************************************************/
+/*************************************************************************/
+/*************************************************************************/
 
 
 /* retrieve CSS property from the element */
-function css(element, property) { return $(element).css(property)}
-
-
-function getFontCSSProperty(element) {
-	//Font
-	var font = {};
-	font.family = css(element, 'font-family');
-	font.size = css(element, 'font-size');
-	font.weight = css(element, 'font-weight') || '400';
-	font.variant = css(element, 'font-variant') || 'normal';
-	font.style = css(element, 'font-style') || 'normal';
-
-	return font;
+function getCSSProperty(element, property, condition) {
+	if ($(element).css(property) != condition) return `${property}: ${$(element).css(property)}`;
 }
 
-function getTextCSSProperty(element) {
-	//Text
-	var text = {};
-	text.letterSpacing = css(element, 'letter-spacing') || 'normal';
-	text.lineHeight = css(element, 'line-height') || 'normal';
-	text.decoration = css(element, 'text-decoration') || 'none';
-	text.align = css(element, 'text-align') || 'start';
-	text.indent = css(element, 'text-indent') || '0px';
-	text.transform = css(element, 'text-transform') || 'none';
-	text.verticalAlign = css(element, 'vertical-align') || 'baseline';
-	text.whiteSpace = css(element, 'white-space') || 'normal';
-	text.wordSpacing = css(element, 'word-spacing') || 'normal';
+function getFontCSSProperty(element) {
+	var fontCSS = '';
+	//font
+	if (getCSSProperty(element, 'font-family')) fontCSS += '\n\t' + getCSSProperty(element, 'font-family') + ';';
+	if (getCSSProperty(element, 'font-size')) fontCSS += '\n\t' + getCSSProperty(element, 'font-size') + ';';
+	if (getCSSProperty(element, 'font-weight', '400')) fontCSS += '\n\t' + getCSSProperty(element, 'font-weight') + ';';
+	if (getCSSProperty(element, 'font-variant', 'normal')) fontCSS += '\n\t' + getCSSProperty(element, 'font-variant') + ';';
+	if (getCSSProperty(element, 'font-style', 'normal')) fontCSS += '\n\t' + getCSSProperty(element, 'font-style') + ';';
+	return fontCSS;
+}
 
-	return text;
+
+function getTextCSSProperty(element) {
+	var textCSS = '';
+	//text
+	if (getCSSProperty(element, 'letter-spacing', '0')) textCSS += '\n\t' + getCSSProperty(element, 'letter-spacing') + ';';
+	if (getCSSProperty(element, 'line-height', 'normal')) textCSS += '\n\t' + getCSSProperty(element, 'line-height') + ';';
+	if (getCSSProperty(element, 'text-decoration', 'none')) textCSS += '\n\t' + getCSSProperty(element, 'text-decoration') + ';';
+	if (getCSSProperty(element, 'text-align', 'start')) textCSS += '\n\t' + getCSSProperty(element, 'text-align') + ';';
+	if (getCSSProperty(element, 'text-indent', '0px')) textCSS += '\n\t' + getCSSProperty(element, 'text-indent') + ';';
+	if (getCSSProperty(element, 'text-transform', 'none')) textCSS += '\n\t' + getCSSProperty(element, 'text-transform') + ';';
+	if (getCSSProperty(element, 'vertical-align', 'baseline')) textCSS += '\n\t' + getCSSProperty(element, 'vertical-align') + ';';
+	if (getCSSProperty(element, 'white-space', 'normal')) textCSS += '\n\t' + getCSSProperty(element, 'white-space') + ';';
+	if (getCSSProperty(element, 'word-spacing', '0px')) textCSS += '\n\t' + getCSSProperty(element, 'word-spacing') + ';';
+	return textCSS;
 }
 
 function getColorBgCSSProperty(element) {
-	var cb = {};
-	//Color
-	cb.color = css(element, 'color');
-
-	//Background
-	cb.bgColor = css(element, 'background-color') || 'transparent';
-	cb.bgAttachment = css(element, 'background-attachment') || 'scroll';
-	cb.bgImage = css(element, 'background-image') || 'none';
-	cb.bgPosition = css(element, 'background-position') || '';
-	cb.bgRepeat = css(element, 'background-repeat') || 'repeat';
-
-	return cb;
+	var colorBgCSS = '';
+	//color & background
+	if (getCSSProperty(element, 'color')) colorBgCSS += '\n\t' + getCSSProperty(element, 'color') + ';';
+	if (getCSSProperty(element, 'background-color', 'rgba(0, 0, 0, 0)')) colorBgCSS += '\n\t' + getCSSProperty(element, 'background-color') + ';';
+	if (getCSSProperty(element, 'background-attachment', 'scroll')) colorBgCSS += '\n\t' + getCSSProperty(element, 'background-attachment') + ';';
+	if (getCSSProperty(element, 'background-image', 'none')) colorBgCSS += '\n\t' + getCSSProperty(element, 'background-image') + ';';
+	if (getCSSProperty(element, 'background-position', '0% 0%')) colorBgCSS += '\n\t' + getCSSProperty(element, 'background-position') + ';';
+	if (getCSSProperty(element, 'background-repeat', 'repeat')) colorBgCSS += '\n\t' + getCSSProperty(element, 'background-repeat') + ';';
+	return colorBgCSS;
 }
 
 function getBoxCSSProperty(element) {
-	var box = {};
+	var boxCSS = '';
 	//height-width
-	box.height = css(element, 'height') || 'auto';
-	box.width = css(element, 'width') || 'auto';
+	if (getCSSProperty(element, 'height', 'auto')) boxCSS += '\n\t' + getCSSProperty(element, 'height') + ';';
+	if (getCSSProperty(element, 'width', 'auto')) boxCSS += '\n\t' + getCSSProperty(element, 'width') + ';';
 
 	//border
-	box.bdTop = {width: css(element, 'border-top-width') || 'none', style: css(element, 'border-top-style') || 'none', color: css(element, 'border-top-color') || 'none'};
-	box.bdBottom = {width: css(element, 'border-bottom-width') || 'none', style: css(element, 'border-bottom-style') || 'none', color: css(element, 'border-bottom-color') || 'none'};
-	box.bdRight = {width: css(element, 'border-right-width') || 'none', style: css(element, 'border-right-style') || 'none', color: css(element, 'border-right-color') || 'none'};
-	box.bdLeft = {width: css(element, 'border-left-width') || 'none', style: css(element, 'border-left-style') || 'none', color: css(element, 'border-left-color') || 'none'};
+	if (getCSSProperty(element, 'border-top-width', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-top-width') + ';';
+	if (getCSSProperty(element, 'border-bottom-width', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-bottom-width') + ';';
+	if (getCSSProperty(element, 'border-right-width', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-right-width') + ';';
+	if (getCSSProperty(element, 'border-left-width', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-left-width') + ';';
 
+	if (getCSSProperty(element, 'border-top-style', 'none')) boxCSS += '\n\t' + getCSSProperty(element, 'border-top-style') + ';';
+	if (getCSSProperty(element, 'border-bottom-style', 'none')) boxCSS += '\n\t' + getCSSProperty(element, 'border-bottom-style') + ';';
+	if (getCSSProperty(element, 'border-right-style', 'none')) boxCSS += '\n\t' + getCSSProperty(element, 'border-right-style') + ';';
+	if (getCSSProperty(element, 'border-left-style', 'none')) boxCSS += '\n\t' + getCSSProperty(element, 'border-left-style') + ';';
+
+	if (getCSSProperty(element, 'border-top-color', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-top-color') + ';';
+	if (getCSSProperty(element, 'border-bottom-color', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-bottom-color') + ';';
+	if (getCSSProperty(element, 'border-right-color', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-right-color') + ';';
+	if (getCSSProperty(element, 'border-left-color', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'border-left-color') + ';';
+	
 	//margin
-	box.mgTop = css(element, 'margin-top') || '0';
-	box.mgBottom = css(element, 'margin-bottom') || '0';
-	box.mgRight = css(element, 'margin-right') || '0';
-	box.mgLeft = css(element, 'margin-left') || '0';
+	if (getCSSProperty(element, 'margin-top', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'margin-top') + ';';
+	if (getCSSProperty(element, 'margin-bottom', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'margin-bottom') + ';';
+	if (getCSSProperty(element, 'margin-right', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'margin-right') + ';';
+	if (getCSSProperty(element, 'margin-left', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'margin-left') + ';';
 
 	//padding
-	box.pdTop = css(element, 'padding-top') || '0';
-	box.pdBottom = css(element, 'padding-bottom') || '0';
-	box.pdRight = css(element, 'padding-right') || '0';
-	box.pdLeft = css(element, 'padding-left') || '0';
+	if (getCSSProperty(element, 'padding-top', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'padding-top') + ';';
+	if (getCSSProperty(element, 'padding-bottom', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'padding-bottom') + ';';
+	if (getCSSProperty(element, 'padding-right', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'padding-right') + ';';
+	if (getCSSProperty(element, 'padding-left', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'padding-left') + ';';
 
 	//max-min height-width
-	box.minHeight = css(element, 'min-height') || '0px';
-	box.maxHeight = css(element, 'max-height') || 'none';
-	box.minWidth = css(element, 'min-width') || '0px';
-	box.maxWidth = css(element, 'max-width') || 'none';
-
-	return box;
+	if (getCSSProperty(element, 'min-height', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'min-height') + ';';
+	if (getCSSProperty(element, 'min-width', '0px')) boxCSS += '\n\t' + getCSSProperty(element, 'min-width') + ';';
+	if (getCSSProperty(element, 'max-height', 'none')) boxCSS += '\n\t' + getCSSProperty(element, 'max-height') + ';';
+	if (getCSSProperty(element, 'max-width', 'none')) boxCSS += '\n\t' + getCSSProperty(element, 'max-width') + ';';
+	return boxCSS;
 }
 
 function getPositionCSSProperty(element) {
-	var pos = {};
-	pos.position = css(element, 'position') || 'static';
-	pos.top = css(element, 'top') || 'auto';
-	pos.bottom = css(element, 'bottom') || 'auto';
-	pos.right = css(element, 'right') || 'auto';
-	pos.left = css(element, 'left') || 'auto';
-	pos.float = css(element, 'float') || 'none';
-
-	return pos;
+	var positionCSS = '';
+	//position
+	if (getCSSProperty(element, 'position', 'static')) positionCSS += '\n\t' + getCSSProperty(element, 'position') + ';';
+	if (getCSSProperty(element, 'top', 'auto')) positionCSS += '\n\t' + getCSSProperty(element, 'top') + ';';
+	if (getCSSProperty(element, 'bottom', 'auto')) positionCSS += '\n\t' + getCSSProperty(element, 'bottom') + ';';
+	if (getCSSProperty(element, 'right', 'auto')) positionCSS += '\n\t' + getCSSProperty(element, 'right') + ';';
+	if (getCSSProperty(element, 'left', 'auto')) positionCSS += '\n\t' + getCSSProperty(element, 'left') + ';';
+	if (getCSSProperty(element, 'float', 'none')) positionCSS += '\n\t' + getCSSProperty(element, 'float') + ';';
+	return positionCSS;
 }
 
-
-function getTableCSSProperty(element, tag) {
-	if (TABLE_TAGS.includes(tag)) {
-		var table = {};
-		table.collapse = css(element, 'border-collapse') || 'seperate';
-		table.spacing = css(element, 'border-spacing') || '0px 0px';
-		table.captionSide = css(element, 'caption-side') || 'top';
-		table.emptyCells = css(element, 'empty-cells') || 'show';
-		table.tableLayout = css(element, 'table-layout') || 'auto';
-
-		return table;
-	} else {
-		return 'table not detected';
-	}
+function getTableCSSProperty(element, tagName) {
+	var tableCSS = '';
+	//table
+	if (getCSSProperty(element, 'border-collapse', 'separate')) tableCSS += '\n\t' + getCSSProperty(element, 'border-collapse') + ';';
+	if (getCSSProperty(element, 'border-spacing', '0px 0px')) tableCSS += '\n\t' + getCSSProperty(element, 'border-spacing') + ';';
+	if (getCSSProperty(element, 'caption-side', 'top')) tableCSS += '\n\t' + getCSSProperty(element, 'caption-side') + ';';
+	if (getCSSProperty(element, 'empty-cells', 'show')) tableCSS += '\n\t' + getCSSProperty(element, 'empty-cells') + ';';
+	if (getCSSProperty(element, 'table-layout', 'auto')) tableCSS += '\n\t' + getCSSProperty(element, 'table-layout') + ';';
+	return tableCSS;
 }
 
-function getListCSSProperty(element, tag) {
-	if (LIST_TAGS.includes(tag)) {
-		var list = {};
-		list.styleImage = css(element, 'list-style-image') || 'none';
-		list.styleType = css(element, 'list-style-type');
-		list.stylePosition = css(element, 'list-style-position');
-		return list;
-	} else {
-		return 'list not detected';
-	}
+function getListCSSProperty(element, tagName) {
+	var listCSS = '';
+	//list
+	if (getCSSProperty(element, 'list-style-image', 'none')) listCSS += '\n\t' + getCSSProperty(element, 'list-style-image') + ';';
+	if (getCSSProperty(element, 'list-style-type', 'none')) listCSS += '\n\t' + getCSSProperty(element, 'list-style-type') + ';';
+	if (getCSSProperty(element, 'list-style-position', 'none')) listCSS += '\n\t' + getCSSProperty(element, 'list-style-position') + ';';
+	return listCSS;
 }
+
 
 
 function getMiscCSSProperty(element) {
-	var misc = {};
-	misc.overflow = css(element, 'overflow') || 'visible';
-	misc.cursor = css(element, 'cursor') || 'auto';
-	misc.visibility = css(element, 'visibility') || 'visible';
-
-	return misc;
+	var miscCSS = '';
+	if (getCSSProperty(element, 'overflow', 'visible')) miscCSS += '\n\t' + getCSSProperty(element, 'overflow') + ';';
+	if (getCSSProperty(element, 'cursor', 'auto')) miscCSS += '\n\t' + getCSSProperty(element, 'cursor') + ';';
+	if (getCSSProperty(element, 'visibility', 'visible')) miscCSS += '\n\t' + getCSSProperty(element, 'visibility') + ';';
+	return miscCSS;
 }
 
 function getEffectCSSProperty(element) {
-	var effect = {};
-	effect.transform = css(element, 'transform');
-	effect.transition = css(element, 'transition');
-	effect.outline = css(element, 'outline');
-	effect.outlineOffset = css(element, 'outline-offset') || '0px';
-	effect.boxSizing = css(element, 'box-sizing') || 'content-box';
-	effect.resize = css(element, 'resize') || 'none';
-
-	effect.textShadow = css(element, 'text-shadow') || 'none';
-	effect.textOverflow = css(element, 'text-overflow') || 'clip';
-	effect.wordWrap = css(element, 'word-wrap') || 'normal';
-	effect.boxShadow = css(element, 'box-shadow') || 'box-shadow';
-
-	effect.bdTopLeftRadius = css(element, 'border-top-left-radius') || '0px';
-	effect.bdTopRightRadius = css(element, 'border-top-right-radius') || '0px';
-	effect.bdBottomLeftRadius = css(element, 'border-bottom-left-radius') || '0px';
-	effect.bdBottomLeftRadius = css(element, 'border-bottom-left-radius') || '0px';
-
-	return effect;
+	var effectCSS = '';
+	if (getCSSProperty(element, 'transform', 'none')) effectCSS += '\n\t' + getCSSProperty(element, 'transform') + ';';
+	if (getCSSProperty(element, 'transition')) effectCSS += '\n\t' + getCSSProperty(element, 'transition') + ';';
+	if (getCSSProperty(element, 'outline')) effectCSS += '\n\t' + getCSSProperty(element, 'outline') + ';';
+	if (getCSSProperty(element, 'outline-offset', '0px')) effectCSS += '\n\t' + getCSSProperty(element, 'outline-offset') + ';';
+	if (getCSSProperty(element, 'box-sizing', 'content-box')) effectCSS += '\n\t' + getCSSProperty(element, 'box-sizing') + ';';
+	if (getCSSProperty(element, 'resize', 'none')) effectCSS += '\n\t' + getCSSProperty(element, 'resize') + ';';
+	if (getCSSProperty(element, 'text-shadow', 'none')) effectCSS += '\n\t' + getCSSProperty(element, 'text-shadow') + ';';
+	if (getCSSProperty(element, 'text-overflow', 'clip')) effectCSS += '\n\t' + getCSSProperty(element, 'text-overflow') + ';';
+	if (getCSSProperty(element, 'word-wrap', 'normal')) effectCSS += '\n\t' + getCSSProperty(element, 'word-wrap') + ';';
+	if (getCSSProperty(element, 'box-shadow', 'none')) effectCSS += '\n\t' + getCSSProperty(element, 'box-shadow') + ';';
+	if (getCSSProperty(element, 'border-top-right-radius', '0px')) effectCSS += '\n\t' + getCSSProperty(element, 'border-top-right-radius') + ';';
+	if (getCSSProperty(element, 'border-top-left-radius', '0px')) effectCSS += '\n\t' + getCSSProperty(element, 'border-top-left-radius') + ';';
+	if (getCSSProperty(element, 'border-bottom-right-radius', '0px')) effectCSS += '\n\t' + getCSSProperty(element, 'border-bottom-right-radius') + ';';
+	if (getCSSProperty(element, 'border-bottom-left-radius', '0px')) effectCSS += '\n\t' + getCSSProperty(element, 'border-bottom-left-radius') + ';';
+	return effectCSS;
 }
-
-
-// Table tagnames
-const TABLE_TAGS = new Array(
-	'TABLE',
-	'CAPTION',
-	'THEAD',
-	'TBODY',
-	'TFOOT',
-	'COLGROUP',
-	'COL',
-	'TR',
-	'TH',
-	'TD'
-);
-
-const LIST_TAGS = new Array(
-	'UL',
-	'LI',
-	'DD',
-	'DT',
-	'OL'
-);
-
 
 function getCurrentDocument() {
 	return window.document;
@@ -291,7 +344,7 @@ function getAllElements (element) {
 
 		for (var i = 0; i < childs.length; i++) {
 			if (childs[i].hasChildNodes()) {
-				elements = elements.concat(this.getAllElements(childs[i]));
+				elements = elements.concat(getAllElements(childs[i]));
 			}
 			else if (childs[i].nodeType == 1) {
 				elements.push(childs[i]);
@@ -304,13 +357,28 @@ function getAllElements (element) {
 
 //closing the stealer
 function close(e) {
-	// Close the css viewer if the cssViewer is enabled.
+	console.log('app successfully escaped');
 	if ( e.keyCode === 27){
-		// Remove the red outline
-		// CSSViewer_current_element.style.outline = '';
+		// Remove the red outline		
 		stealer.disable();
 	}	
 }
 
 
-document.onkeydown = close;
+/* prototype methods */
+Stealer.prototype.enable = function() {
+	var document = getCurrentDocument();
+	this.addEventListeners();
+}
+
+Stealer.prototype.disable = function() {
+	var document = getCurrentDocument();
+	this.removeEventListeners();
+}
+
+
+stealer = new Stealer();
+stealer.enable();
+
+document.addEventListener('keydown', close);
+
