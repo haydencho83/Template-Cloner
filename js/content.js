@@ -28,6 +28,11 @@ function Stealer() {
 function eMouseOver(e) {
 	e.stopPropagation();
 	this.style.outline = '1px dashed #f00';
+	
+	var self = this;
+	setTimeout(function(){
+		self.style.outline = '';
+	}, 5000);
 }
 
 function eMouseOut(e) {
@@ -35,14 +40,11 @@ function eMouseOut(e) {
 	this.style.outline = '';
 }
 
-/*************************************************************************/
-/*************************************************************************/
-/*************************************************************************/
-
 function eMouseDown(e) {
-	this.style.outline = '';
 	e.stopPropagation();
+	this.style.outline = '';
 	var component = getComponent(this);
+
 	chrome.runtime.sendMessage(component);
 }
 
@@ -80,11 +82,6 @@ function getComponentCSS(element, className) {
 	  chrome.runtime.sendMessage(CSSComponent);
 	// return CSSComponent;
 }
-
-
-/*************************************************************************/
-/*************************************************************************/
-/*************************************************************************/
 
 
 /* retrieve CSS property from the element */
@@ -257,15 +254,6 @@ function getAllElements (element) {
 }
 
 
-//closing the stealer
-function close(e) {
-	console.log('app successfully escaped');
-	if ( e.keyCode === 27){
-		// Remove the red outline		
-		stealer.disable();
-	}	
-}
-
 
 /* prototype methods */
 Stealer.prototype.enable = function() {
@@ -282,5 +270,10 @@ Stealer.prototype.disable = function() {
 stealer = new Stealer();
 stealer.enable();
 
-document.addEventListener('keydown', close);
+document.addEventListener('keydown', function(e){
+	if ( e.keyCode === 27){
+		stealer.disable();
+		console.log('app successfully escaped');
+	}	
+});
 
