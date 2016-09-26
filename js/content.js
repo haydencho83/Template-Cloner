@@ -23,6 +23,8 @@ function Stealer() {
 	}
 }
 
+var template = '';
+var css = '';
 
 /* eventListner */
 function eMouseOver(e) {
@@ -43,26 +45,38 @@ function eMouseOut(e) {
 function eMouseDown(e) {
 	e.stopPropagation();
 	this.style.outline = '';
-	var component = getComponent(this);
-	chrome.runtime.sendMessage({template: component});
+	template = '';
+	css = '';
+	template += getComponent(this);
+	setTimeout(sendMessageToPopup, 500);
+}
+
+function sendMessageToPopup() {
+	chrome.runtime.sendMessage({template: template, css: css})
 }
 
 
+function getUserCustomizedName() {
+	var userCustomizedName = prompt('what is the name of this template?');
+	return userCustomizedName;
+}
 
 //getting component of ONE element
 function getComponent(element){
+	var userCustomizedName;
 	var component = '';
-	var className = `example-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
+	if (!userCustomizedName) userCustomizedName = getUserCustomizedName();
+	var className = `${userCustomizedName}-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
 	getComponentCSS(element, className);
 
-	component += `&lt${element.tagName.toLowerCase()} class="${className}"&gt`;
+	component += `<${element.tagName.toLowerCase()} class="${className}">`;
 	for (var i = 0; i < element.childNodes.length; i++) {
 		if (element.childNodes[i].nodeType == 3) component += element.childNodes[i].nodeValue;
 		else if (element.childNodes[i].nodeType == 1) {
 			component += getComponent(element.childNodes[i]);
 		}
 	}
-	component += `&lt/${element.tagName.toLowerCase()}&gt`;
+	component += `</${element.tagName.toLowerCase()}>`;
 	return component;
 }
 
@@ -78,10 +92,9 @@ function getComponentCSS(element, className) {
 		+ getListCSSProperty(element)
 		+ getMiscCSSProperty(element)
 		+ getEffectCSSProperty(element)
-	  + '\n}';
+	  + '\n}\n\n';
 
-	  chrome.runtime.sendMessage({css: CSSComponent});
-	// return CSSComponent;
+	  css += CSSComponent;
 }
 
 

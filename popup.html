@@ -3,53 +3,34 @@
 <head>
 	<title>Template Stealer</title>
 	<link href="popup.css" type="text/css" rel="stylesheet">
+	<script src="js/jquery-3.1.0.slim.min.js"></script>
 	<script src="popup.js"></script>
 </head>
 <body>
 
-
-
+<h1 class="title">This is what you just captured</h1>
+<div class="captured"></div>
 
 <div class="template">
-	<h2>Template	<button class="example-1474842496862-button-component-clone">Clipboard<span class="example-1474842496884-span-component-clone"></span></button>
-	<button class="example-1474842496862-button-component-clone">CodePen<span class="example-1474842496884-span-component-clone"></span></button></h2>
-
-	<code id="template">
-	<!-- &ltclass="example-1474840704915-p-component-clone"&gtMillions of amazing sites across the web are being built with Bootstrap. Get started on your own with our growing &lta class="example-1474840704937-a-component-clone"&gtcollection of examples&lt/a&gt or by exploring some of our favorites.&lt/p&gt -->
-	</code>
+	<h2>HTML Template</h2>
+	<code id="template"><p class="placeholder">You haven't captured any template yet!</p></code>
 </div>
-
 
 <br>
 
 <div class="css">
-	<h2>CSS <button class="example-1474842496862-button-component-clone">Clipboard<span class="example-1474842496884-span-component-clone"></span></button>
-	<button class="example-1474842496862-button-component-clone">CodePen<span class="example-1474842496884-span-component-clone"></span></button></h2>
-
-	<code id="css">
-	<!-- a.example-1474840704937-a-component-clone {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 21px;
-	font-weight: 300;
-	line-height: 29.4px;
-	text-align: center;
-	color: rgb(51, 122, 183);
-	height: 24px;
-	width: 200.3125px;
-	border-top-color: rgb(51, 122, 183);
-	border-bottom-color: rgb(51, 122, 183);
-	border-right-color: rgb(51, 122, 183);
-	border-left-color: rgb(51, 122, 183);
-	list-style-type: disc;
-	list-style-position: outside;
-	transition: all 0s ease 0s;
-	outline: rgb(51, 122, 183) none 0px;
-	box-sizing: border-box;
-	} -->
-	</code>
+	<h2>CSS Style</h2>
+	<code id="css"><p class="placeholder">You haven't captured any CSS yet!</p></code>
 </div>
 
 
+<form action="http://codepen.io/pen/define" method="POST" target="_blank" id='codepen-form'>
+    <input type="hidden" name="data" value=''/>
+    <button type='submit' class="example-1474842496862-button-component-clone"><span class="fui-mail"></span> Send to CodePen</button>
+</form>
+
+<!-- <button class="example-1474842496862-button-component-clone" id="template-clipboard">Template to Clipboard</button>
+<button class="example-1474842496862-button-component-clone" id="css-clipboard">CSS style to Clipboard</button> -->
 
 </body>
 </html>

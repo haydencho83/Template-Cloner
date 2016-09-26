@@ -3,13 +3,27 @@ body {
 	background-color: #f7f7f7;
 }
 
-
+.title {
+	text-align: center;
+	color: #3b5c98
+}
 
 h2 {
 	color: #3b5c98
 }
 
+.placeholder {
+	color: rgba(0, 0, 0, 0.4);
+}
+
+.captured {
+	margin: auto;
+	margin-bottom: 5%;
+
+}
+
 .template {
+	margin-top: 5%;
 	padding: 5%;
 	padding-top: 2%;
 	background-color: #dfe3ee;
@@ -29,9 +43,8 @@ h2 {
 }
 
 
-
 button.example-1474842496862-button-component-clone {
-	float: right;
+	margin-top: 3%;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	text-align: center;
@@ -39,8 +52,8 @@ button.example-1474842496862-button-component-clone {
 	white-space: nowrap;
 	color: rgb(255, 255, 255);
 	background-color: rgba(32, 77, 116, 0.6);
-	height: 25px;
-	width: 80px;
+	height: 35px;
+	width: 130px;
 	border-top-width: 1px;
 	border-bottom-width: 1px;
 	border-right-width: 1px;
