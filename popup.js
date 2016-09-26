@@ -1,5 +1,5 @@
-var template, css;
-
+// var template, css;
+console.log('popup');
 document.addEventListener('DOMContentLoaded', function(){
 	var window = chrome.extension.getBackgroundPage();
 	var document = window.document;
@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 chrome.runtime.onMessage.addListener(function(componentObj, sender, sendResponse) {
 	var component = componentObj;
-	console.log(component)
 	document.getElementById('template').textContent = component.template;
 	document.getElementById('css').textContent = component.css;
 })

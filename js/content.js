@@ -44,8 +44,10 @@ function eMouseDown(e) {
 	e.stopPropagation();
 	this.style.outline = '';
 	var component = getComponent(this);
-	chrome.runtime.sendMessage({component: component});
+	chrome.runtime.sendMessage({template: component});
 }
+
+
 
 //getting component of ONE element
 function getComponent(element){
