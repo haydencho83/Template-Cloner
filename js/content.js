@@ -44,8 +44,7 @@ function eMouseDown(e) {
 	e.stopPropagation();
 	this.style.outline = '';
 	var component = getComponent(this);
-
-	chrome.runtime.sendMessage(component);
+	chrome.runtime.sendMessage({component: component});
 }
 
 //getting component of ONE element
@@ -54,14 +53,14 @@ function getComponent(element){
 	var className = `example-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
 	getComponentCSS(element, className);
 
-	component += `<${element.tagName.toLowerCase()} class="${className}">`;
+	component += `&lt${element.tagName.toLowerCase()} class="${className}"&gt`;
 	for (var i = 0; i < element.childNodes.length; i++) {
 		if (element.childNodes[i].nodeType == 3) component += element.childNodes[i].nodeValue;
 		else if (element.childNodes[i].nodeType == 1) {
 			component += getComponent(element.childNodes[i]);
 		}
 	}
-	component += `</${element.tagName.toLowerCase()}>`;
+	component += `&lt/${element.tagName.toLowerCase()}&gt`;
 	return component;
 }
 
@@ -79,7 +78,7 @@ function getComponentCSS(element, className) {
 		+ getEffectCSSProperty(element)
 	  + '\n}';
 
-	  chrome.runtime.sendMessage(CSSComponent);
+	  chrome.runtime.sendMessage({css: CSSComponent});
 	// return CSSComponent;
 }
 

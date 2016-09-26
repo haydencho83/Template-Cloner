@@ -1,0 +1,72 @@
+body {
+	padding: 3%;
+	background-color: #f7f7f7;
+}
+
+
+
+h2 {
+	color: #3b5c98
+}
+
+.template {
+	padding: 5%;
+	padding-top: 2%;
+	background-color: #dfe3ee;
+	max-height: 300px;
+	font-size: 15px;
+	overflow: scroll;
+}
+
+
+.css {
+	padding: 5%;
+	padding-top: 2%;
+	background-color: #dfe3ee;
+	max-height: 300px;
+	font-size: 15px;
+	overflow: scroll;
+}
+
+
+
+button.example-1474842496862-button-component-clone {
+	float: right;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	color: rgb(255, 255, 255);
+	background-color: rgba(32, 77, 116, 0.6);
+	height: 25px;
+	width: 80px;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-right-style: solid;
+	border-left-style: solid;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-right: 12px;
+	padding-left: 12px;
+	position: relative;
+	list-style-type: disc;
+	list-style-position: outside;
+	cursor: pointer;
+	transition: all 0s ease 0s;
+	outline: rgb(255, 255, 255) none 0px;
+	box-sizing: border-box;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+
+button.example-1474842496862-button-component-clone:hover {
+	background-color: rgba(32, 77, 116, 1);
+}
