@@ -265,14 +265,18 @@ Stealer.prototype.disable = function() {
 	this.removeEventListeners();
 }
 
+$(document).ready(function(){
+	stealer = new Stealer();
+	stealer.enable();
 
-stealer = new Stealer();
-stealer.enable();
-
-document.addEventListener('keydown', function(e){
+	document.addEventListener('keydown', function(e){
 	if ( e.keyCode === 27){
 		stealer.disable();
 		console.log('app successfully escaped');
 	}	
 });
+
+
+})
+
 
