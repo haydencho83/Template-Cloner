@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "Template Stealer",
+  "name": "Template Cloner",
   "description": "A simple app which captures a template with CSS properties",
-  "version": "1.0",
+  "version": "1.0.0",
   "background": {
     "scripts": ["js/background.js"]
   },
@@ -15,7 +15,7 @@
   ],
   "browser_action": {
     "default_icon": "icon.png",
-    "default_title": "I want to steal this template"
+    "default_title": "I want to clone this template"
   },
   "permissions": [
     "activeTab",

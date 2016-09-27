@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
+	
 	chrome.runtime.onMessage.addListener(function(componentObj, sender, sendResponse) {
+
 		var template = componentObj.template;
 		var css = componentObj.css;
 		document.getElementById('template').textContent = template;

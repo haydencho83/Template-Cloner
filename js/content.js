@@ -1,4 +1,11 @@
-function Stealer() {
+/* global variables */
+var userCustomizedName;
+var template = '';
+var css = '';
+
+
+/* constructor function */
+function TemplateCloner() {
 
 	this.addEventListeners = function() {
 		var document = getCurrentDocument();
@@ -23,18 +30,13 @@ function Stealer() {
 	}
 }
 
-var template = '';
-var css = '';
-
 /* eventListner */
 function eMouseOver(e) {
 	e.stopPropagation();
 	this.style.outline = '1px dashed #f00';
-	
+
 	var self = this;
-	setTimeout(function(){
-		self.style.outline = '';
-	}, 5000);
+	setTimeout(function(){ self.style.outline = ''; }, 5000);
 }
 
 function eMouseOut(e) {
@@ -45,31 +47,26 @@ function eMouseOut(e) {
 function eMouseDown(e) {
 	e.stopPropagation();
 	this.style.outline = '';
+	
 	template = '';
 	css = '';
+	userCustomizedName = '';
+	
 	template += getComponent(this);
 	setTimeout(sendMessageToPopup, 500);
 }
 
-function sendMessageToPopup() {
-	chrome.runtime.sendMessage({template: template, css: css})
-}
 
-
-function getUserCustomizedName() {
-	var userCustomizedName = prompt('what is the name of this template?');
-	return userCustomizedName;
-}
-
+/* main functionalities */
 //getting component of ONE element
 function getComponent(element){
-	var userCustomizedName;
 	var component = '';
-	if (!userCustomizedName) userCustomizedName = getUserCustomizedName();
+	getUserCustomizedName();
 	var className = `${userCustomizedName}-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
 	getComponentCSS(element, className);
 
-	component += `<${element.tagName.toLowerCase()} class="${className}">`;
+	var imageUrl = window.location.href + $(element).attr('src');
+	component += `<${element.tagName.toLowerCase()} class="${className}" src="${imageUrl}">`;
 	for (var i = 0; i < element.childNodes.length; i++) {
 		if (element.childNodes[i].nodeType == 3) component += element.childNodes[i].nodeValue;
 		else if (element.childNodes[i].nodeType == 1) {
@@ -80,6 +77,14 @@ function getComponent(element){
 	return component;
 }
 
+function getUserCustomizedName() {
+	if (!userCustomizedName) {userCustomizedName = prompt('what is the name of this template?'); }
+	return userCustomizedName;
+}
+
+function sendMessageToPopup() {
+	chrome.runtime.sendMessage({template: template, css: css})
+}
 
 function getComponentCSS(element, className) {
 	var CSSComponent = element.tagName.toLowerCase() + '.' + className + ' {'
@@ -245,6 +250,7 @@ function getEffectCSSProperty(element) {
 	return effectCSS;
 }
 
+
 function getCurrentDocument() {
 	return window.document;
 }
@@ -268,25 +274,24 @@ function getAllElements (element) {
 }
 
 
-
 /* prototype methods */
-Stealer.prototype.enable = function() {
+TemplateCloner.prototype.enable = function() {
 	var document = getCurrentDocument();
 	this.addEventListeners();
 }
 
-Stealer.prototype.disable = function() {
+TemplateCloner.prototype.disable = function() {
 	var document = getCurrentDocument();
 	this.removeEventListeners();
 }
 
 $(document).ready(function(){
-	stealer = new Stealer();
-	stealer.enable();
+	templateCloner = new TemplateCloner();
+	templateCloner.enable();
 
 	document.addEventListener('keydown', function(e){
 	if ( e.keyCode === 27){
-		stealer.disable();
+		TemplateCloner.disable();
 		console.log('app successfully escaped');
 	}	
 });

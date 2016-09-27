@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Template Stealer</title>
-	<link href="popup.css" type="text/css" rel="stylesheet">
-	<script src="js/jquery-3.1.0.slim.min.js"></script>
-	<script src="popup.js"></script>
-</head>
-<body>
+	<head>
+		<title>Template Stealer</title>
+		<link href="popup.css" type="text/css" rel="stylesheet">
+		<script src="js/jquery-3.1.0.slim.min.js"></script>
+		
+	</head>
+	<body>
+		<h1 class="title">This is what you just captured!</h1>
+		<div class="captured"></div>
+		<div class="template">
+			<h2>HTML Template</h2>
+			<code id="template"><p class="placeholder">You haven't captured any template yet!</p></code>
+		</div>
 
-<h1 class="title">This is what you just captured</h1>
-<div class="captured"></div>
+		<br>
 
-<div class="template">
-	<h2>HTML Template</h2>
-	<code id="template"><p class="placeholder">You haven't captured any template yet!</p></code>
-</div>
+		<div class="css">
+			<h2>CSS Style</h2>
+			<code id="css"><p class="placeholder">You haven't captured any CSS yet!</p></code>
+		</div>
 
-<br>
-
-<div class="css">
-	<h2>CSS Style</h2>
-	<code id="css"><p class="placeholder">You haven't captured any CSS yet!</p></code>
-</div>
-
-
-<form action="http://codepen.io/pen/define" method="POST" target="_blank" id='codepen-form'>
-    <input type="hidden" name="data" value=''/>
-    <button type='submit' class="example-1474842496862-button-component-clone"><span class="fui-mail"></span> Send to CodePen</button>
-</form>
-
-<!-- <button class="example-1474842496862-button-component-clone" id="template-clipboard">Template to Clipboard</button>
-<button class="example-1474842496862-button-component-clone" id="css-clipboard">CSS style to Clipboard</button> -->
-
-</body>
+		<form action="http://codepen.io/pen/define" method="POST" target="_blank" id='codepen-form'>
+		    <input type="hidden" name="data" value=''/>
+		    <button type='submit' class="example-1474842496862-button-component-clone"><span class="fui-mail"></span> Send to CodePen</button>
+		</form>
+		<!-- <button class="example-1474842496862-button-component-clone" id="template-clipboard">Template to Clipboard</button>
+		<button class="example-1474842496862-button-component-clone" id="css-clipboard">CSS style to Clipboard</button> -->
+		<script src="popup.js"></script>
+	</body>
 </html>
