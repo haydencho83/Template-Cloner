@@ -36,7 +36,7 @@ function eMouseOver(e) {
 	this.style.outline = '1px dashed #f00';
 
 	var self = this;
-	setTimeout(function(){ self.style.outline = ''; }, 5000);
+	setTimeout(function(){ self.style.outline = ''; }, 3000);
 }
 
 function eMouseOut(e) {
@@ -65,8 +65,11 @@ function getComponent(element){
 	var className = `${userCustomizedName}-${Date.now()}-${element.tagName.toLowerCase()}-component-clone`;
 	getComponentCSS(element, className);
 
-	var imageUrl = window.location.href + $(element).attr('src');
-	component += `<${element.tagName.toLowerCase()} class="${className}" src="${imageUrl}">`;
+	if ($(element).attr('src')) {
+		var imageSrc = ` src="${window.location.href + $(element).attr('src')}"`;
+	} else { var imageSrc = ''}
+
+	component += `<${element.tagName.toLowerCase()} class="${className}"${imageSrc}>`;
 	for (var i = 0; i < element.childNodes.length; i++) {
 		if (element.childNodes[i].nodeType == 3) component += element.childNodes[i].nodeValue;
 		else if (element.childNodes[i].nodeType == 1) {
@@ -78,7 +81,7 @@ function getComponent(element){
 }
 
 function getUserCustomizedName() {
-	if (!userCustomizedName) {userCustomizedName = prompt('what is the name of this template?'); }
+	if (!userCustomizedName) {userCustomizedName = prompt(`what is the name of this template?(Don't include '.,')`); }
 	return userCustomizedName;
 }
 
@@ -291,7 +294,7 @@ $(document).ready(function(){
 
 	document.addEventListener('keydown', function(e){
 	if ( e.keyCode === 27){
-		TemplateCloner.disable();
+		templateCloner.disable();
 		console.log('app successfully escaped');
 	}	
 });
